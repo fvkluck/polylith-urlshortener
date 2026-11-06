@@ -1,0 +1,37 @@
+[project]
+name = "polylith-keyvaluestore"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "fvkluck", email = "f.v.kluck@gmail.com" }
+]
+requires-python = ">=3.14"
+dependencies = [
+    "redis>=8.1.0",
+]
+
+[project.scripts]
+polylith-keyvaluestore = "polylith_keyvaluestore:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+dev-mode-dirs = ["components", "bases", "development", "."]
+
+[tool.uv.build-backend]
+namespace = true
+module-name = "my_namespace"
+module-root = ""
+
+[dependency-groups]
+dev = [
+    "fakeredis>=2.40.0",
+    "polylith-cli>=1.50.1",
+    "pytest>=9.2.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
