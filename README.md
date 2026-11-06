@@ -47,13 +47,28 @@ uv run python -m my_namespace.urlshortener_cli shorten https://example.com/a/ver
 # -> http://localhost:8000/vAqiItJ
 ```
 
-Note that the default backend is in-process: state lives only inside one
-command run. To `resolve` a code in a later invocation — or to share links
-with the HTTP service — run the CLI against redis:
+The default backend is in-process, so a one-shot shorten and a later
+resolve cannot see each other. This is exactly why the CLI also works as
+an **interactive shell**: run it with no arguments and it keeps one store
+alive for the whole session, making the in-memory backend usable for a
+complete local demo without installing Redis:
 
 ```bash
-KV_BACKEND=redis uv run python -m my_namespace.urlshortener_cli resolve vAqiItJ
+uv run python -m my_namespace.urlshortener_cli
+urlshortener shell — backend: InMemoryStore
+commands:
+  shorten <url> [--base-url URL]   shorten a URL, prints the short URL
+  resolve <code>                   print the original URL
+  ...
+urlshortener> shorten https://example.com/a/very/long/url
+http://localhost:8000/vAqiItJ
+urlshortener> resolve vAqiItJ
+https://example.com/a/very/long/url
+urlshortener> quit
 ```
+
+One-shot mode still works as before; against Redis both modes share
+state across calls (`KV_BACKEND=redis`).
 
 **HTTP API** (FastAPI; `POST /shorten`, `GET /{code}` redirect, `GET /healthz`):
 
