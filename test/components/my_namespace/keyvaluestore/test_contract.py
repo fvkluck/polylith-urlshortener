@@ -50,3 +50,21 @@ def test_delete_removes_key(store: KeyValueStore) -> None:
 
 def test_delete_missing_key_is_noop(store: KeyValueStore) -> None:
     store.delete("missing")
+
+
+def test_set_if_absent_writes_free_key(store: KeyValueStore) -> None:
+    assert store.set_if_absent("key", "value") is True
+    assert store.get("key") == "value"
+
+
+def test_set_if_absent_rejects_taken_key(store: KeyValueStore) -> None:
+    store.set("key", "original")
+    assert store.set_if_absent("key", "other") is False
+    assert store.get("key") == "original"
+
+
+def test_set_if_absent_is_claimable_again_after_delete(store: KeyValueStore) -> None:
+    store.set("key", "value")
+    store.delete("key")
+    assert store.set_if_absent("key", "new") is True
+    assert store.get("key") == "new"

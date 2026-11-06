@@ -17,5 +17,9 @@ class RedisStore:
     def set(self, key: str, value: str, ttl: int | None = None) -> None:
         self._client.set(key, value, ex=ttl)
 
+    def set_if_absent(self, key: str, value: str, ttl: int | None = None) -> bool:
+        # SET NX: atomic check-and-set on the server side
+        return bool(self._client.set(key, value, ex=ttl, nx=True))
+
     def delete(self, key: str) -> None:
         self._client.delete(key)

@@ -23,6 +23,14 @@ class KeyValueStore(Protocol):
         """
         ...
 
+    def set_if_absent(self, key: str, value: str, ttl: int | None = None) -> bool:
+        """Atomically store ``value`` under ``key`` only if no live entry exists.
+
+        Returns True if the entry was written, False if ``key`` was already
+        taken. TTL semantics match ``set``.
+        """
+        ...
+
     def delete(self, key: str) -> None:
         """Remove ``key``. Deleting a missing key is a no-op."""
         ...

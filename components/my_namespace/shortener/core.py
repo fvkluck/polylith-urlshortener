@@ -34,7 +34,9 @@ def shorten(
 ) -> ShortenedUrl:
     """Validate ``url`` and store it under a fresh code.
 
-    ``rng`` may be injected for deterministic testing; defaulting to a fresh
+    Codes are claimed atomically via ``set_if_absent``, so concurrent
+    shorten calls can never overwrite each other's entry. ``rng`` may be
+    injected for deterministic testing; defaulting to a fresh
     ``random.Random`` keeps this component free of global mutable state.
     Each call produces a new code even for a repeated URL.
     """
@@ -42,8 +44,7 @@ def shorten(
     rng = rng if rng is not None else random.Random()
     for _ in range(MAX_COLLISION_RETRIES + 1):
         code = codes.generate_code(rng, code_length)
-        if store.get(code) is None:
-            store.set(code, url)
+        if store.set_if_absent(code, url):
             return ShortenedUrl(code=code, url=url)
     raise CodeCollisionError(
         f"Could not find a free {code_length}-character code after "

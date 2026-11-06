@@ -28,5 +28,11 @@ class InMemoryStore:
         expires_at = time.monotonic() + ttl if ttl is not None else None
         self._data[key] = (value, expires_at)
 
+    def set_if_absent(self, key: str, value: str, ttl: int | None = None) -> bool:
+        if self.get(key) is not None:  # get() also clears expired entries
+            return False
+        self.set(key, value, ttl)
+        return True
+
     def delete(self, key: str) -> None:
         self._data.pop(key, None)
