@@ -38,6 +38,7 @@ dev = [
     "httpx>=0.28.1",
     "polylith-cli>=1.50.1",
     "pytest>=9.2.0",
+    "uvicorn>=0.54.0",
 ]
 
 [tool.pytest.ini_options]
