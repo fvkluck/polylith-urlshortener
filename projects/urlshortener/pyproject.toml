@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling", "hatch-polylith-bricks"]
+build-backend = "hatchling.build"
+
+[project]
+name = "urlshortener"
+version = "0.1.0"
+description = "URL shortener service: urlshortener_api base with shortener and keyvaluestore components."
+
+authors = [
+    { name = "fvkluck", email = "f.v.kluck@gmail.com" }
+]
+
+requires-python = ">=3.14"
+
+dependencies = [
+    "fastapi>=0.129.0",
+    "uvicorn>=0.40.0",
+    "redis>=8.1.0",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["my_namespace"]
+
+[tool.hatch.build.hooks.polylith-bricks]
+
+[tool.polylith.bricks]
+"../../bases/my_namespace/urlshortener_api" = "my_namespace/urlshortener_api"
+"../../components/my_namespace/shortener" = "my_namespace/shortener"
+"../../components/my_namespace/keyvaluestore" = "my_namespace/keyvaluestore"

@@ -26,9 +26,15 @@ namespace = true
 module-name = "my_namespace"
 module-root = ""
 
+[tool.polylith.bricks]
+"bases/my_namespace/urlshortener_api" = "my_namespace/urlshortener_api"
+"components/my_namespace/keyvaluestore" = "my_namespace/keyvaluestore"
+"components/my_namespace/shortener" = "my_namespace/shortener"
 [dependency-groups]
 dev = [
     "fakeredis>=2.40.0",
+    "fastapi>=0.162.0",
+    "httpx>=0.28.1",
     "polylith-cli>=1.50.1",
     "pytest>=9.2.0",
 ]
