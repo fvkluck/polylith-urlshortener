@@ -19,6 +19,9 @@ dependencies = [
     "redis>=8.1.0",
 ]
 
+[project.scripts]
+urlshortener = "my_namespace.urlshortener_cli.core:main"
+
 [tool.hatch.build.targets.wheel]
 packages = ["my_namespace"]
 
@@ -26,5 +29,6 @@ packages = ["my_namespace"]
 
 [tool.polylith.bricks]
 "../../bases/my_namespace/urlshortener_api" = "my_namespace/urlshortener_api"
+"../../bases/my_namespace/urlshortener_cli" = "my_namespace/urlshortener_cli"
 "../../components/my_namespace/shortener" = "my_namespace/shortener"
 "../../components/my_namespace/keyvaluestore" = "my_namespace/keyvaluestore"
